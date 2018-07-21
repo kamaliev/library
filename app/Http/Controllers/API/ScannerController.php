@@ -23,13 +23,12 @@ class ScannerController extends Controller {
     private $type;
 
     /**
-     * Store a newly created resource in storage.
+     * Create new Cd album object or Book object
      *
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function scan(Request $request) {
-
         if (!$this->checkValidation($request, $errors)) {
             return response()->json($errors, 422);
         }
