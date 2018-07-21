@@ -93,3 +93,8 @@ Get author albums
 GET api/v1/cds/author?author=Би
 ```
 
+## Logs
+
+```
+cd /var/www/library/storage/logs/scanner.log
+```
