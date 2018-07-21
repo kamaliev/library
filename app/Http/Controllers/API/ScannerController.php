@@ -28,7 +28,7 @@ class ScannerController extends Controller {
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request) {
+    public function scan(Request $request) {
 
         if (!$this->checkValidation($request, $errors)) {
             return response()->json($errors, 422);

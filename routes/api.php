@@ -15,8 +15,7 @@ use Illuminate\Http\Request;
 */
 
 Route::prefix('v1')->group(function() {
-    Route::apiResource('scan', 'API\ScannerController')
-         ->except(['index', 'show', 'update', 'destroy']);
+    Route::post('scan', 'API\ScannerController@scan');
 
     Route::prefix('books')->group(function() {
         Route::get('top/{limit}', 'API\BookController@topAuthors');
