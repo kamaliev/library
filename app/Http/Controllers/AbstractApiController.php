@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\DB;
+use Mockery\Exception;
 
 /**
  * Abstract Controller For Book and Cd
@@ -52,30 +53,19 @@ class AbstractApiController extends Controller implements ApiInterface {
     private $enum;
 
     /**
-     * Chek who called construct
-     * AbstractApiController constructor.
+     * Initial Configuration
+     * @param string $table
+     * @param string $authorResource
+     * @param string $resource
+     * @param string $model
+     * @param string $enum
      */
-    public function __construct() {
-        switch(get_called_class()) {
-            case CdController::class : {
-                $this->table = 'cds';
-                $this->authorResource = AuthorCdsResource::class;
-                $this->resource = CdsResource::class;
-                $this->model = Cd::class;
-                $this->enum = Author::ENUM_CD;
-
-                break;
-            }
-            case BookController::class : {
-                $this->table = 'books';
-                $this->authorResource = AuthorBooksResource::class;
-                $this->resource = BooksResource::class;
-                $this->model = Book::class;
-                $this->enum = Author::ENUM_BOOK;
-
-                break;
-            }
-        }
+    public function initialCongiguration(string $table, string $authorResource, string $resource, string $model, string $enum) {
+        $this->table = $table;
+        $this->authorResource = $authorResource;
+        $this->resource = $resource;
+        $this->model = $model;
+        $this->enum = $enum;
     }
 
     /**
@@ -172,18 +162,26 @@ class AbstractApiController extends Controller implements ApiInterface {
 
         $selectRow = null;
 
-        if (get_called_class() == BookController::class) {
-            $selectRow = DB::raw('                        
+        switch ($this->enum) {
+            case Author::ENUM_BOOK: {
+                $selectRow = DB::raw('                        
                         authors.author,
               CASE WHEN (MAX(books.year) + 1 - MIN(books.year))=0 THEN COUNT(books.isbn)
                 ELSE COUNT(books.isbn) / (MAX(books.year) + 1 - MIN(books.year))::float
               END AS AVERAGE');
-        } else {
-            $selectRow = DB::raw('
+
+                break;
+            }
+
+            case Author::ENUM_CD: {
+                $selectRow = DB::raw('
                 authors.author,
                   CASE WHEN (MAX(cds.year) + 1 - MIN(cds.year))=0 THEN COUNT(cds.id)
                     ELSE COUNT(cds.id) / (MAX(cds.year) + 1 - MIN(cds.year))::float
                   END AS AVERAGE');
+
+                break;
+            }
         }
 
         $response = DB::table('authors')
