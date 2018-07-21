@@ -10,4 +10,19 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
+
+    /**
+     * Use utf8 in response
+     * @param     $data
+     * @param int $code
+     * @return \Illuminate\Http\JsonResponse
+     */
+    protected function jsonResponse($data, $code = 200)
+    {
+        return response()->json($data, $code,
+            [
+                'Content-Type' => 'application/json;charset=UTF-8',
+                'Charset' => 'utf-8'
+            ], JSON_UNESCAPED_UNICODE);
+    }
 }
