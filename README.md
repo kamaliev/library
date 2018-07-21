@@ -98,3 +98,10 @@ GET api/v1/cds/author?author=Би
 ```
 cd /var/www/library/storage/logs/scanner.log
 ```
+
+## Test
+
+```bash
+cd /var/www/library
+./vendor/bin/phpunit
+```
