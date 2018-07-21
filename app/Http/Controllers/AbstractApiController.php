@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Author;
 use App\Book;
 use App\Cd;
-use App\Http\ApiInterface;
 use App\Http\Controllers\API\BookController;
 use App\Http\Controllers\API\CdController;
 use App\Http\Resources\AuthorBooksResource;
